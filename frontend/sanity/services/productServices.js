@@ -1,4 +1,4 @@
-import { client } from "../client";
+import { client, writeClient } from "../client";
 
 export async function fetchAllProduct() {
     const data = await client.fetch(`*[_type == "products"] {
@@ -17,6 +17,7 @@ export async function fetchAllProduct() {
 // Funksjon som henter et produkt basert på en slug:
 export async function fetchProductBySlug(slug) {
     const data = await client.fetch(`*[_type == "products" && producturl.current == $slug]{
+        _id,
         productname,
         description,
         "categoryname": category->categorytitle,
@@ -38,4 +39,6 @@ export async function updateReview(productid, reviewer, comment, rating) {
     .commit({autoGenerateArrayKeys: true})
     .then(() => {return "Success"})
     .catch((error) => {return "Error: " + error.message})
+
+    return result
 }
